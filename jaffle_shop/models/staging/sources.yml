@@ -1,0 +1,26 @@
+version: 2
+
+sources:
+  - name: pg_source
+    database: dbt
+    schema: source
+
+    tables:
+      - name: customers
+        columns:
+          - name: id
+            tests:
+              - unique
+              - not_null
+      - name: payments
+      - name: orders
+        columns:
+          - name: id
+            tests:
+              - unique
+              - not_null
+          - name: user_id
+        loaded_at_field: _etl_loaded_at
+        freshness:
+          warn_after: {count: 1, period: minute}
+          error_after: {count: 2000000, period: hour}
